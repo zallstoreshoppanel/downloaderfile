@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Uploader & Downloader</title>
+
+    <!-- CSS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e2f;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: #2d2d44;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.7);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #8a2be2;
+        }
+
+        input[type="file"] {
+            margin: 15px 0;
+            padding: 10px;
+            background: #444;
+            color: #fff;
+            border: 1px solid #8a2be2;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        button {
+            background: #8a2be2;
+            border: none;
+            padding: 10px 20px;
+            color: #fff;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #a566e3;
+        }
+
+        #downloadSection {
+            margin-top: 20px;
+        }
+
+        #downloadLink {
+            display: inline-block;
+            margin-top: 10px;
+            background: #8a2be2;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        #downloadLink:hover {
+            background: #a566e3;
+        }
+
+        .copy-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .copy-section input {
+            width: 70%;
+            padding: 8px;
+            border: 1px solid #8a2be2;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+            background: #444;
+            color: #fff;
+        }
+
+        .copy-section button {
+            border-radius: 0 5px 5px 0;
+            padding: 8px 15px;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            display: none;
+            margin: 20px auto;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #8a2be2;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>File Uploader & Downloader</h1>
+
+        <!-- Form Upload -->
+        <input type="file" id="fileInput">
+        <button id="uploadBtn">Upload File</button>
+
+        <!-- Loading Spinner -->
+        <div class="spinner" id="loadingSpinner"></div>
+
+        <!-- Link Download -->
+        <div id="downloadSection" style="display: none;">
+            <p>File berhasil diupload! Klik link di bawah atau copy link untuk mendownload:</p>
+
+            <!-- Link Download -->
+            <a id="downloadLink" href="#" download>Download Sekarang</a>
+
+            <!-- Copy Link Section -->
+            <div class="copy-section">
+                <input type="text" id="downloadURL" readonly>
+                <button id="copyBtn">Copy Link</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const downloadSection = document.getElementById('downloadSection');
+        const downloadLink = document.getElementById('downloadLink');
+        const downloadURL = document.getElementById('downloadURL');
+        const copyBtn = document.getElementById('copyBtn');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+
+        uploadBtn.addEventListener('click', () => {
+            const file = fileInput.files[0];
+
+            if (file) {
+                loadingSpinner.style.display = 'block'; // Tampilkan animasi loading
+
+                // Simulasi proses upload (misal 2 detik)
+                setTimeout(() => {
+                    const fileURL = URL.createObjectURL(file);
+
+                    downloadLink.href = fileURL;
+                    downloadLink.download = file.name;
+
+                    downloadURL.value = fileURL;  // Tampilkan link di input untuk di-copy
+                    downloadSection.style.display = 'block';
+                    loadingSpinner.style.display = 'none'; // Sembunyikan animasi loading
+                }, 2000);
+            } else {
+                alert("Silakan pilih file terlebih dahulu!");
+            }
+        });
+
+        // Fitur Copy Link
+        copyBtn.addEventListener('click', () => {
+            downloadURL.select();
+            document.execCommand('copy');
+            alert("Link berhasil disalin!");
+        });
+    </script>
+</body>
+</html>
